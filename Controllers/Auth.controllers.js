@@ -18,7 +18,9 @@ export const Login = async (req,res) => {
             return res.status(401).json({ success: false, message: "Password is wrong" })
         }
 
-        return res.status(200).json({ success: true, message: "Login successfully", user: { name: user.name, id: user._id } })
+        const token = await Jwt.sign({id: user._id}, process.env.JWT_SECRET)
+
+        return res.status(200).json({ success: true, message: "Login successfully", user: { name: user.name, id: user._id }, token })
     } catch {
         return res.status(500).json({ success: false, message: error })
     }
@@ -50,8 +52,11 @@ export const Register = async (req,res) => {
 
 export const getCurrentUser = async (req, res) => {
     try {
-        const { id } = req.body;
-        if (!id) return res.status(401).json({ success: false, message: "ID is required" })
+        const { token } = req.body;
+        if (!token) return res.status(401).json({ success: false, message: "Token is required" })
+
+        const {id} = await Jwt.verify(token, process.env.JWT_SECRET)
+        
         const user = await UserModal.findById(id);
         if(!user) return res.status(401).json({success:false,message:"User not found"})
 

@@ -22,6 +22,7 @@ app.get("/", function(req, res) {
 })
 
 app.use("/api/v1", router)
+
 mongoose.connect(process.env.MONGOURL).then(() => console.log('Database Connected...'))
 
 //or
