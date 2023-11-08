@@ -9,6 +9,6 @@ const product = new Schema ({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }
-})
+},{timestamps:true})
 
 export default mongoose.model('Product', product)
