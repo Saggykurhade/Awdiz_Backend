@@ -4,6 +4,7 @@ export const checkUserId = async (req, res, next) => {
       try {
         const { id } = req.body;
         const user = await UserModal.findById(id)
+        // console.log(user)
         if (user) {
             next();
         } else {
