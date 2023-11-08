@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use((req,res,next) =>{
-    console.log("hi from middleware use")
+    // console.log("hi from middleware use")
     // res.send("hi  from middleware use")
     next();
 })

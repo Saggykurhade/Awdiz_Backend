@@ -6,7 +6,7 @@ const router = Router();
 
 router.post('/add-product', checkUserId, addProduct);
 router.post('/get-all-product', checkUserId, getAllProducts);
-router.post("/get-single-product", getSingleProduct);
+router.get("/get-single-product", getSingleProduct);
 router.get("/get-page-results", getPageResults);
 router.get("/get-sorted-results", getSortedResults);
 router.get("/get-filtered-results", getFilteredReuslts);
