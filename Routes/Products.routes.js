@@ -5,7 +5,7 @@ import { checkUserId } from "../Middlewares/AllMiddlewares.js";
 const router = Router();
 
 router.post('/add-product', checkUserId, addProduct);
-router.post('/get-all-product', checkUserId, getAllProducts);
+router.get('/get-all-products', getAllProducts);
 router.get("/get-single-product", getSingleProduct);
 router.get("/get-page-results", getPageResults);
 router.get("/get-sorted-results", getSortedResults);

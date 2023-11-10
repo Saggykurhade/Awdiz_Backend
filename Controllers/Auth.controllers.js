@@ -29,15 +29,14 @@ export const Login = async (req,res) => {
 
 export const Register = async (req,res) => {
     try {
-        const { name, email, password, number } =req.body;
+        const { name, email, password } = req.body.userData;
 
-        if (!name || !email || !password || !number) return res.status(401).json({ success: false, message: "All fields are mandatory..."})
+        if (!name || !email || !password ) return res.status(401).json({ success: false, message: "All fields are mandatory..."})
 
         const user = new UserModal({
             name: name,
             email,
-            password,
-            number
+            password
         })
 
         await user.save();

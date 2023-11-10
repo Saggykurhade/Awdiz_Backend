@@ -2,11 +2,13 @@ import ProductModal from "../Modals/Product.modal.js"
 
 export const getAllProducts = async (req, res) => {
     try {
-        const products = await ProductModel.find({});
-        if(products.length === 0) return res.status(401).json({ success:false, message:"No Products found" });
-        return res.status(200).json({ success:true, products:products });
+        const products = await ProductModal.find({});
+        if(products.length) {
+            return res.status(200).json({ message: "products found", success: true, products: products });
+        }
+        return res.status(404).json({ success: false, message: "No Products found" });
     } catch (error) {
-        return res.status(500).json({ success:false, message:error.message })
+        return res.status(500).json({ success: false, message: error.message })
     }
 }
 
