@@ -1,9 +1,11 @@
 import UserModal from "../Modals/User.modal.js";
 import bcrypt from 'bcrypt';
+import Jwt from "jsonwebtoken";
+
 
 export const Login = async (req,res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password } = req.body.userData;
         if (!email || !password) return res.status(401).json({ success: false, message: "all fields are mandotory..." })
 
         const user = await UserModal.findOne({ email: email })
