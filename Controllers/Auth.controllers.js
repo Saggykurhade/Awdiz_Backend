@@ -13,6 +13,7 @@ export const Login = async (req,res) => {
 
         if (!user) return res.status(401).json({ success: false, message: "email is wrong" })
 
+        console.log(password, user.password,"password, user.password")
         const isPasscorrect = await bcrypt.compare(password, user.password);
         // console.log(isPasscorrect, "CHECK HERE")
 
@@ -34,6 +35,8 @@ export const Register = async (req,res) => {
         const { name, email, password } = req.body.userData;
 
         if (!name || !email || !password ) return res.status(401).json({ success: false, message: "All fields are mandatory..."})
+
+        // check password bcrypt
 
         const user = new UserModal({
             name: name,
