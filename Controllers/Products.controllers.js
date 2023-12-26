@@ -3,6 +3,7 @@ import ProductModal from "../Modals/Product.modal.js"
 export const getAllProducts = async (req, res) => {
     try {
         const products = await ProductModal.find({});
+
         if (products.length) {
             return res.status(200).json({ message: "products found", success: true, products: products });
         }
@@ -15,8 +16,10 @@ export const getAllProducts = async (req, res) => {
 export const getSingleProduct = async (req, res) => {
     try {
         const { id } = req.body;
+
         if (!id) return res.status(401).json({ success: false, message: "No product ID provided" });
         const product = await ProductModel.findById({ _id: id });
+
         if (!product) return res.status(401).json({ success: false, message: "Product not found" });
         return res.status(200).json({ success: true, product: product });
     } catch (error) {
@@ -85,5 +88,47 @@ export const getFilteredReuslts = async (req, res) => {
 
     } catch (error) {
         return res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+export const YourProducts = async (req, res) => {
+    try {
+        const { id } = req.body;
+        if (!id) return res.status(404).json({ message: "Id not found" })
+
+        const allproducts = await ProductModal.find({ userId: id })
+        return res.status(200).json({ success: true, products: allproducts })
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error })
+
+    }
+}
+
+export const updateProduct = async (req, res) => {
+    try {
+        const { name, price, category, image, _id } = req.body.productData;
+        if (!name || !price || !category || !image || !_id) return res.status(404).json({ success: false, message: "All fields are required." })
+
+        await ProductModal.findByIdAndUpdate(_id, { name, price, category, image })
+
+        return res.status(200).json({ success: true, message: "Product Updated successfully." })
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error })
+    }
+}
+
+export const deleteProduct = async (req, res) => {
+    try {
+        const { id } = req.query;
+        if (!id) return res.status(404).json({ message: "Id not found." })
+
+        await ProductModal.findByIdAndRemove(id)
+        return res.status(200).json({ success: true, message: "Product deleted successfully." })
+
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ success: false, message: error })
     }
 }
