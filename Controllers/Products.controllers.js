@@ -2,7 +2,7 @@ import ProductModal from "../Modals/Product.modal.js"
 
 export const getAllProducts = async (req, res) => {
     try {
-        const products = await ProductModal.find({});
+        const products = await ProductModal.find({}).limit(10).select("-createdAt -updatedAt -__v ");
 
         if (products.length) {
             return res.status(200).json({ message: "products found", success: true, products: products });
@@ -15,13 +15,16 @@ export const getAllProducts = async (req, res) => {
 
 export const getSingleProduct = async (req, res) => {
     try {
-        const { id } = req.body;
+        console.log("here")
+        const { id: productId } = req.body;
 
-        if (!id) return res.status(401).json({ success: false, message: "No product ID provided" });
-        const product = await ProductModel.findById({ _id: id });
+        if (!productId) return res.status(404).json({ success: false, message: "Product id is required..." });
+        const product = await ProductModal.findById(productId).select("-createdAt -updatedAt -__v ");
 
-        if (!product) return res.status(401).json({ success: false, message: "Product not found" });
-        return res.status(200).json({ success: true, product: product });
+        if (product) {
+            return res.status(200).json({ success: true, message: "Product found.", product: product })
+        }
+        return res.status(404).json({ success: false, message: "Product not found." })
     } catch (error) {
         return res.status(500).json({ success: false, message: error.message })
     }
@@ -47,51 +50,75 @@ export const addProduct = async (req, res) => {
     }
 }
 
-export const getPageResults = async (req, res) => {
+export const filterProducts = async (req, res) => {
     try {
-        const { page } = req.body;
-        if (!page) return res.status(401).json({ success: false, message: "Page number required" });
+        const { skip, page = 10, query, sorting } = req.body;
 
-        const products = await ProductModel.find({}).skip(page * 2).limit(2);
-        if (!products) return res.status(401).json({ success: false, message: "No products found" });
+        const updatedQuery = { category: query }
 
-        return res.status(200).json({ success: true, products: products })
+        const name = sorting.replace(/^-/, "");
+
+        const order = sorting[0] == "-" ? "-" : "";
+
+        const updatedSorting = { [name]: `${order}1` }
+
+        // console.log(updatedSorting)
+
+        const products = await ProductModal.find(updatedQuery).skip(skip * 10).limit(page).sort(updatedSorting)
+
+        return res.status(200).json({ success: true, message: "Products found", products })
+
 
     } catch (error) {
-        return res.status(500).json({ success: false, message: error.message })
+        return res.status(500).json({ success: false, message: error })
     }
 }
 
-export const getSortedResults = async (req, res) => {
-    try {
-        const { sortType } = req.body;
-        if (!sortType) return res.status(401).json({ success: false, message: "Sort type required" });
+// export const getPageResults = async (req, res) => {
+//     try {
+//         const { page } = req.body;
+//         if (!page) return res.status(401).json({ success: false, message: "Page number required" });
 
-        const products = await ProductModal.find({}).sort({ price: sortType });
-        if (products.length === 0) return res.status(401).json({ success: false, message: "No products found" })
+//         const products = await ProductModel.find({}).skip(page * 2).limit(2);
+//         if (!products) return res.status(401).json({ success: false, message: "No products found" });
 
-        return res.status(200).json({ success: true, products: products });
-    } catch (error) {
-        return res.status(500).json({ success: false, message: error.message });
-    }
-}
+//         return res.status(200).json({ success: true, products: products })
 
-export const getFilteredReuslts = async (req, res) => {
-    try {
-        const { filterValue } = req.body;
-        if (!filterValue) return res.status(401).json({ success: false, message: "Filter value is required" });
+//     } catch (error) {
+//         return res.status(500).json({ success: false, message: error.message })
+//     }
+// }
 
-        const products = await ProductModel.find({ category: filterValue });
-        if (!products) return res.status(401).json({ success: false, message: "No products found" });
+// export const getSortedResults = async (req, res) => {
+//     try {
+//         const { sortType } = req.body;
+//         if (!sortType) return res.status(401).json({ success: false, message: "Sort type required" });
 
-        return res.status(200).json({ success: true, products: products })
+//         const products = await ProductModal.find({}).sort({ price: sortType });
+//         if (products.length === 0) return res.status(401).json({ success: false, message: "No products found" })
 
-    } catch (error) {
-        return res.status(500).json({ success: false, message: error.message });
-    }
-}
+//         return res.status(200).json({ success: true, products: products });
+//     } catch (error) {
+//         return res.status(500).json({ success: false, message: error.message });
+//     }
+// }
 
-export const YourProducts = async (req, res) => {
+// export const getFilteredResults = async (req, res) => {
+//     try {
+//         const { filterValue } = req.body;
+//         if (!filterValue) return res.status(401).json({ success: false, message: "Filter value is required" });
+
+//         const products = await ProductModel.find({ category: filterValue });
+//         if (!products) return res.status(401).json({ success: false, message: "No products found" });
+
+//         return res.status(200).json({ success: true, products: products })
+
+//     } catch (error) {
+//         return res.status(500).json({ success: false, message: error.message });
+//     }
+// }
+
+export const yourProducts = async (req, res) => {
     try {
         const { id } = req.body;
         if (!id) return res.status(404).json({ message: "Id not found" })

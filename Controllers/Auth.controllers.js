@@ -11,9 +11,9 @@ export const Login = async (req, res) => {
         const user = await UserModal.findOne({ email: email })
         // console.log(user, "user")
 
-        if (!user) return res.status(401).json({ success: false, message: "email is wrong" })
+        if (!user) return res.status(401).json({ success: false, message: "Email is wrong" })
 
-        console.log(password, user.password, "password, user.password")
+        // console.log(password, user.password, "password, user.password")
         const isPasscorrect = await bcrypt.compare(password, user.password);
         // console.log(isPasscorrect, "CHECK HERE")
 
@@ -38,6 +38,8 @@ export const Register = async (req, res) => {
 
         // check password bcrypt
 
+        const hashedPassword = await bcrypt.hash(password, 10);
+        // console.log(hashedPassword,"hashedPassword")
         const user = new UserModal({
             name: name,
             email,

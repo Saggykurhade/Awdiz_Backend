@@ -1,9 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 
 const user = new Schema({
-    name: String,
+    name: {
+        type: String
+    },
     email: String,
     password: String,
+    cart: [String],
     number: Number
 })
 
