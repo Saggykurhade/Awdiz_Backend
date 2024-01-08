@@ -43,7 +43,7 @@ export const Register = async (req, res) => {
         const user = new UserModal({
             name: name,
             email,
-            password
+            password: hashedPassword
         })
 
         await user.save();
