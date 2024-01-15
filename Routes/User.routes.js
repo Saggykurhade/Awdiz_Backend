@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Cart, addCart, deleteCart, getTesting, patchUpdateUser, putUpdateUser } from "../Controllers/User.controllers.js";
-import axios from "axios";
+// import axios from "axios";
 
 const router = Router();
 
