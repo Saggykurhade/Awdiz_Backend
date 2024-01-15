@@ -74,49 +74,49 @@ export const filterProducts = async (req, res) => {
     }
 }
 
-// export const getPageResults = async (req, res) => {
-//     try {
-//         const { page } = req.body;
-//         if (!page) return res.status(401).json({ success: false, message: "Page number required" });
+export const getPageResults = async (req, res) => {
+    try {
+        const { page } = req.body;
+        if (!page) return res.status(401).json({ success: false, message: "Page number required" });
 
-//         const products = await ProductModel.find({}).skip(page * 2).limit(2);
-//         if (!products) return res.status(401).json({ success: false, message: "No products found" });
+        const products = await ProductModel.find({}).skip(page * 2).limit(2);
+        if (!products) return res.status(401).json({ success: false, message: "No products found" });
 
-//         return res.status(200).json({ success: true, products: products })
+        return res.status(200).json({ success: true, products: products })
 
-//     } catch (error) {
-//         return res.status(500).json({ success: false, message: error.message })
-//     }
-// }
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message })
+    }
+}
 
-// export const getSortedResults = async (req, res) => {
-//     try {
-//         const { sortType } = req.body;
-//         if (!sortType) return res.status(401).json({ success: false, message: "Sort type required" });
+export const getSortedResults = async (req, res) => {
+    try {
+        const { sortType } = req.body;
+        if (!sortType) return res.status(401).json({ success: false, message: "Sort type required" });
 
-//         const products = await ProductModal.find({}).sort({ price: sortType });
-//         if (products.length === 0) return res.status(401).json({ success: false, message: "No products found" })
+        const products = await ProductModal.find({}).sort({ price: sortType });
+        if (products.length === 0) return res.status(401).json({ success: false, message: "No products found" })
 
-//         return res.status(200).json({ success: true, products: products });
-//     } catch (error) {
-//         return res.status(500).json({ success: false, message: error.message });
-//     }
-// }
+        return res.status(200).json({ success: true, products: products });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+}
 
-// export const getFilteredResults = async (req, res) => {
-//     try {
-//         const { filterValue } = req.body;
-//         if (!filterValue) return res.status(401).json({ success: false, message: "Filter value is required" });
+export const getFilteredResults = async (req, res) => {
+    try {
+        const { filterValue } = req.body;
+        if (!filterValue) return res.status(401).json({ success: false, message: "Filter value is required" });
 
-//         const products = await ProductModel.find({ category: filterValue });
-//         if (!products) return res.status(401).json({ success: false, message: "No products found" });
+        const products = await ProductModel.find({ category: filterValue });
+        if (!products) return res.status(401).json({ success: false, message: "No products found" });
 
-//         return res.status(200).json({ success: true, products: products })
+        return res.status(200).json({ success: true, products: products })
 
-//     } catch (error) {
-//         return res.status(500).json({ success: false, message: error.message });
-//     }
-// }
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+}
 
 export const yourProducts = async (req, res) => {
     try {
